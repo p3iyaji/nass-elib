@@ -6,6 +6,7 @@ use App\Filament\Resources\ResourceResource\Pages;
 use App\Filament\Resources\ResourceResource\RelationManagers;
 use App\Models\Category;
 use App\Models\Resource as ResourceModel;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Form;
@@ -15,12 +16,18 @@ use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Http\UploadedFile;
 
 class ResourceResource extends Resource
 {
     protected static ?string $model = ResourceModel::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 
     public static function form(Form $form): Form
     {
@@ -58,26 +65,37 @@ class ResourceResource extends Resource
                         Forms\Components\TextInput::make('edition'),
                         Forms\Components\TextInput::make('volume'),
                         Forms\Components\TextInput::make('issue'),
-                        Forms\Components\TextInput::make('abstract'),
-                        Forms\Components\TextInput::make('references'),
-                        Forms\Components\TextInput::make('tags')
-                            ->required(),
                     ])->columns(3),
                 Fieldset::make('')
                     ->schema([
+                        Forms\Components\RichEditor::make('abstract'),
+                        Forms\Components\RichEditor::make('references'),
+                    ])->columns(2),
+                Fieldset::make('')
+                    ->schema([
+                        Forms\Components\TextInput::make('tags')
+                            ->required(),
                         Forms\Components\TextInput::make('pages')
                             ->numeric()
                             ->required(),
+                    ])->columns(2),
+                Fieldset::make('File')
+                    ->schema([
                         Forms\Components\FileUpload::make('file')
-                            ->label('Upload file')
+                            ->label('Upload File')
                             ->acceptedFileTypes(['application/pdf'])
                             ->disk('public')
-                            ->maxsize(5120)
-                            ->required(),
+                            //->directory('uploads/documents')
+                            ->maxSize(60000) // 40 MB
+                            ->required()
+                            ->preserveFilenames()
+                        ->disabled(fn () => ! filament::auth()->user()->is_admin),
                         Forms\Components\FileUpload::make('cover_image')
                             ->image()
-                            ->disk('public'),
-                    ])->columns(3),
+                            ->disk('public')
+                       // ->directory('uploads/cover_images')
+                        ->preserveFilenames(),
+                    ])->columns(2),
                 ]);
     }
 
@@ -93,9 +111,9 @@ class ResourceResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('authors')
                     ->searchable(),
-                ViewColumn::make('file')
-                    ->label('PDF Preview')
-                    ->view('components.pdf-preview'),
+                // ViewColumn::make('file')
+                //     ->label('PDF Preview')
+                //     ->view('components.pdf-preview'),
                 Tables\Columns\TextColumn::make('authors_affiliation')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),

@@ -62,4 +62,9 @@ class Resource extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function members()
+    {
+        return $this->belongsToMany(User::class, 'resource_member')->withTimestamps();
+    }
 }

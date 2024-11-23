@@ -14,7 +14,13 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+
+        },
+        variants: {
+            backgroundColor: ['responsive', 'hover', 'focus'], // Ensure 'hover' is included
         },
     },
-    plugins: [],
+    plugins: [
+
+    ],
 };

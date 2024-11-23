@@ -23,13 +23,13 @@ return new class extends Migration
             $table->string('authors');
             $table->string('authors_affiliation')->nullable();
             $table->string('publisher');
-            $table->date('date_of_publication');
+            $table->date('date_of_publication')->nullable();
             $table->year('year_of_publication');
             $table->string('issn_isbn_doi')->nullable();
             $table->string('edition')->nullable();
             $table->string('volume')->nullable();
             $table->string('issue')->nullable();
-            $table->string('abstract')->nullable();
+            $table->longText('abstract')->nullable();
             $table->string('references')->nullable();
             $table->string('tags');
             $table->string('pages')->default(1);
