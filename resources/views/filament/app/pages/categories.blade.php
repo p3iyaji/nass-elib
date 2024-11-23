@@ -19,7 +19,7 @@
                                 <a href="#" wire:click="openModal({{ $category['id'] }})"
                                   class="underline hover:text- amber-500">{{ $category['name'] }}</a>
                             </h3>
-                            <p class="text-xs text-gray-600 mt-2">
+                            <p class="text-xs text-gray-800 mt-2">
                                 {{ Str::limit(strip_tags($category['description']), 250) }} <br/>
                             </p>
                             <!-- Action Buttons -->
