@@ -4,10 +4,15 @@ use App\Filament\App\Pages\Books;
 use App\Filament\App\Pages\PreviewResource;
 use App\Filament\App\Pages\ViewResource;
 use App\Livewire\ResourceCategory;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('config_cache', function(){
+   \Artisan::call('config:cache');
 });
 
 Route::get('/size-test', function(){
