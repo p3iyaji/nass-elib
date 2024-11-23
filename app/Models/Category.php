@@ -9,7 +9,7 @@ class Category extends Model
 {
     protected $table = 'categories';
 
-    protected $fillable = ['name', 'user_id'];
+    protected $fillable = ['name', 'slug', 'description', 'cover_image', 'user_id'];
 
     public function resource(): BelongsTo
     {

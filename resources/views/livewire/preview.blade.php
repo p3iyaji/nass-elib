@@ -1,0 +1,3 @@
+<div>
+{{ $resource->title }}
+</div>
